@@ -19,6 +19,10 @@ class HomeViewmodel: ViewModel(), KoinComponent{
     private val _todos: MutableStateFlow<List<TodoEntity>> = MutableStateFlow(emptyList())
     val todos = _todos.asStateFlow()
 
+    init {
+        getTodos()
+    }
+
 
     fun getTodos(){
         viewModelScope.launch(Dispatchers.IO){
@@ -27,6 +31,29 @@ class HomeViewmodel: ViewModel(), KoinComponent{
             }
         }
     }
+
+
+
+    fun addTodo(todo: TodoEntity){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.addTodo(todo)
+        }
+
+    }
+
+    fun deleteTodo(todo: TodoEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.deleteTodo(todo)
+        }
+
+    }
+    fun updateTodo(todo: TodoEntity){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.updateTodo(todo)
+        }
+    }
+
+
 
 
 }
