@@ -7,22 +7,21 @@ import kotlinx.coroutines.flow.Flow
 
 class TodoRepoImpl(private val database : TodoDatabase): TodoRepo {
 
-   // private val dao: database.todoDao = TODO()()
-
+    private val dao = database.todoDao()
 
     override suspend fun getTodos(): Flow<List<TodoEntity>> {
-        TODO("Not yet implemented")
+        return dao.getTodos() as Flow<List<TodoEntity>>
     }
 
     override suspend fun addTodo(todo: TodoEntity) {
-        TODO("Not yet implemented")
+        dao.addTodo(todo)
     }
 
     override suspend fun updateTodo(todo: TodoEntity) {
-        TODO("Not yet implemented")
+        dao.updateTodo(todo)
     }
 
     override suspend fun deleteTodo(todo: TodoEntity) {
-        TODO("Not yet implemented")
+        dao.deleteTodo(todo)
     }
 }

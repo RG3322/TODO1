@@ -22,6 +22,10 @@ interface TodoDao {
    @Update
    fun updateTodo(todo: TodoEntity)
 
+   @Insert
+   fun addTodo(todo: TodoEntity)
+
+
 
 
 
