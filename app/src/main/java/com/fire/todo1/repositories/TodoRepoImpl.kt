@@ -5,6 +5,7 @@ import com.fire.todo1.database.TodoEntity
 import kotlinx.coroutines.flow.Flow
 
 
+@Suppress("UNCHECKED_CAST") // this annotation is used to tell the compiler that the code is safe
 class TodoRepoImpl(private val database : TodoDatabase): TodoRepo {
 
     private val dao = database.todoDao()
