@@ -1,0 +1,32 @@
+package com.fire.todo1.screens
+
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.fire.todo1.database.TodoEntity
+import com.fire.todo1.repositories.TodoRepo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+
+
+class HomeViewmodel: ViewModel(), KoinComponent{
+    private val repo: TodoRepo by inject()
+
+    private val _todos: MutableStateFlow<List<TodoEntity>> = MutableStateFlow(emptyList())
+    val todos = _todos.asStateFlow()
+
+
+    fun getTodos(){
+        viewModelScope.launch(Dispatchers.IO){
+            repo.getTodos().collect{data->
+                _todos.update { data }
+            }
+        }
+    }
+
+
+}
