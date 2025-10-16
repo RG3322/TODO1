@@ -1,57 +1,48 @@
 package com.fire.todo1.screens
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import com.fire.todo1.database.TodoEntity
-import com.fire.todo1.repositories.TodoRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 
+@Composable
+fun HomScreen(
+    viewmodel: HomeViewmodel
+){
+    val todos by viewmodel.todos.collectAsState()
 
-class HomeViewmodel: ViewModel(), KoinComponent{
-    private val repo: TodoRepo by inject()
+    Scaffold(containerColor = MaterialTheme.colorScheme.tertiary,
+        floatingActionButton = {
+            FloatingActionButton(onClick = {}, containerColor = Color.Green, contentColor = Color.Black) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = null)
 
-    private val _todos: MutableStateFlow<List<TodoEntity>> = MutableStateFlow(emptyList())
-    val todos = _todos.asStateFlow()
-
-    init {
-        getTodos()
-    }
-
-
-    fun getTodos(){
-        viewModelScope.launch(Dispatchers.IO){
-            repo.getTodos().collect{data->
-                _todos.update { data }
             }
-        }
-    }
+        })
 
 
 
-    fun addTodo(todo: TodoEntity){
-        viewModelScope.launch(Dispatchers.IO){
-            repo.addTodo(todo)
-        }
 
-    }
 
-    fun deleteTodo(todo: TodoEntity) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.deleteTodo(todo)
+    {paddingValues ->
+        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()){
+
         }
 
     }
-    fun updateTodo(todo: TodoEntity){
-        viewModelScope.launch(Dispatchers.IO){
-            repo.updateTodo(todo)
-        }
-    }
+
+
+
+
 
 
 
