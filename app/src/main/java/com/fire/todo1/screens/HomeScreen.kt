@@ -4,9 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 //import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -38,19 +41,53 @@ fun HomScreen(
         mutableStateOf(false)
     }
     if (dialogOpen) {
-        Dialog(onDismissRequest = { setDialogOpen(false) }) {
+       val (title, setTitle) = remember {
+            mutableStateOf("")
+        }
+       val (description, setDescription) = remember {
+            mutableStateOf("")
+        }
+        Dialog(onDismissRequest = { setDialogOpen(false)})
+        {
+
+
+
             Column(modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White).padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
 
-                OutlinedTextField(value = "", onValueChange = {}, modifier = Modifier.padding(8.dp),label = {
+                OutlinedTextField(value = title, onValueChange = {
+                    setTitle(it)
+                }, modifier = Modifier.padding(8.dp),label = {
                     Text(text = "Title")
                 },colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
                     unfocusedContainerColor = Color.Blue,
                 ))
 
+
+                Spacer(modifier = Modifier.height(4.dp))
+
+
+
+
+                OutlinedTextField(value = description, onValueChange = {
+                    setDescription(it)
+                }, modifier = Modifier.padding(8.dp),label = {
+                    Text(text = "Description")
+                },colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.Blue,
+                ))
+
+
+
+
             }
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(onClick = {}) { }
+
         }
     }
 
@@ -61,7 +98,7 @@ fun HomScreen(
                 containerColor = Color.Green,
                 contentColor = Color.Black
             ) {
-               // Icon(imageVector = Icons.Default.Add, contentDescription = null)
+                //Icon(imageVector = Icons.Default.Add, , contentDescription = null)
 
             }
         })
