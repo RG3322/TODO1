@@ -21,7 +21,7 @@ class KoinApp: Application() {
                 }
                 single {
                     TodoRepoImpl(database = get())
-                } bind TodoRepoImpl::class
+                } bind com.fire.todo1.repositories.TodoRepo::class
 
             })
             }

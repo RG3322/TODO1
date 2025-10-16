@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -14,7 +15,7 @@ interface TodoDao {
 
 
     @Query("SELECT * FROM 'todos'")
-    suspend fun getTodos(): List<TodoEntity>
+    fun getTodos(): Flow<List<TodoEntity>>
 
     @Delete
     suspend fun deleteTodo(todo: TodoEntity)

@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.fire.todo1"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
