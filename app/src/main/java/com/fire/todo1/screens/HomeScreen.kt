@@ -6,10 +6,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 //import androidx.compose.material.icons.Icons
 //import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
@@ -30,10 +34,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fire.todo1.database.TodoEntity
 
 @Composable
 fun HomScreen(
-    viewmodel: HomeViewmodel
+    viewmodel: HomeViewmodel = viewModel()
 ){
     val todos by viewmodel.todos.collectAsState()
 
@@ -52,7 +58,10 @@ fun HomScreen(
 
 
 
-            Column(modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(Color.White).padding(8.dp),
+            Column(modifier = Modifier
+                .clip(RoundedCornerShape(8.dp))
+                .background(Color.White)
+                .padding(8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center) {
 
@@ -86,7 +95,16 @@ fun HomScreen(
             }
             Spacer(modifier = Modifier.height(4.dp))
 
-            Button(onClick = {}) { }
+            Button(onClick = {
+                if (title.isNotEmpty() && description.isNotEmpty()){
+                    viewmodel.addTodo(TodoEntity(title=title,
+                        subTitle = description))
+                    setDialogOpen(false)
+                }
+
+            }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)) {//basic editing for button color and text
+                Text("Submit",color=Color.White)
+            }
 
         }
     }
@@ -109,7 +127,21 @@ fun HomScreen(
 
     {
         paddingValues ->
-        Box(modifier = Modifier.padding(paddingValues).fillMaxSize()){
+        Box(modifier = Modifier
+            .padding(paddingValues)
+            .fillMaxSize()){
+
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+
+                items(todos){todos->
+                    Text(text=todos.title)
+                }
+
+
+
+
+            }
 
 
 
