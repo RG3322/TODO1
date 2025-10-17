@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.room.util.TableInfo
 import com.fire.todo1.database.TodoEntity
 
 @Composable
@@ -225,10 +226,11 @@ fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit) {
                 horizontal = 8.dp,
                 vertical = 16.dp
             ), horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+
 
 
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {  }
 
             Box(
                 modifier = Modifier
@@ -250,10 +252,35 @@ fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit) {
 
                 }
             }
+            Column {
+
+                Text(
+                    text = todo.title,
+                    fontSize = 22.sp,
+                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                )
+                Text(
+                    text = todo.subTitle, fontSize = 12.sp,color = Color(0xB2AD6868)
+                )
+
+            }
+        }
+        Box(
+            modifier = Modifier.size(25.dp).clip(CircleShape).background(Color.Red).padding(4.dp)
+        , contentAlignment = Alignment.Center
+        ){
+            //Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White, modifier = Modifier.clickable {
+                onDelete()
+           // })
+        }
+        if (todo.done){
+
         }
 
 
     }
+    Text(text= "",modifier = Modifier.paddig()
 }
 
 
