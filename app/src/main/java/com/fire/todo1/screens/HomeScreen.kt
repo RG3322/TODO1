@@ -204,42 +204,56 @@ fun HomScreen(
 }
 
 @Composable
-fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit){
+fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit) {
 
-    val color by animateColorAsState(targetValue = if (todo.done) Color.Green else Color.White,
-    animationSpec = tween(500))
+    val color by animateColorAsState(
+        targetValue = if (todo.done) Color.Green else Color.White,
+        animationSpec = tween(500)
+    )
 
 
 
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd){
-        Row(modifier = Modifier.fillMaxWidth().background(color).clip(RoundedCornerShape(5.dp))
+    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
+        Row(
+            modifier = Modifier.fillMaxWidth().background(color).clip(RoundedCornerShape(5.dp))
             .clickable(onClick = {
                 onClick()
             }
 
 
-
-
-            ).padding(horizontal = 8.dp,
-                vertical = 16.dp)
-            , horizontalArrangement = Arrangement.SpaceBetween,
+            ).padding(
+                horizontal = 8.dp,
+                vertical = 16.dp
+            ), horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
 
 
-
-
-        ){
+        ) {
 
             Box(
                 modifier = Modifier
                     .size(25.dp)
-                    .clip(CircleShape), contentAlignment = Alignment.Center
-            ) { /* Content for the box can be added here */ }
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colorScheme.tertiary)
+                    .padding(4.dp), contentAlignment = Alignment.Center
+            ) {
+                Row {
+                    AnimatedVisibility(
+                        visible = todo.done,
+                        enter = scaleIn() + fadeIn(),
+                        exit = scaleOut() + fadeOut()
+                    ) {
+                        //   Icon(imageVector = Icons.Default.Check, contentDescription = null, tint = Color.White) { } //still don't know why it snot working
+
+                    }
+
+
+                }
+            }
         }
+
+
     }
-
-
-
 }
 
 
