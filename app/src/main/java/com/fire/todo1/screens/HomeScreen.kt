@@ -1,5 +1,10 @@
 package com.fire.todo1.screens
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -33,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.fire.todo1.database.TodoEntity
@@ -102,8 +108,8 @@ fun HomScreen(
                     setDialogOpen(false)
                 }
 
-            }, modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)) {//basic editing for button color and text
-                Text("Submit",color=Color.White)
+            }, shape = RoundedCornerShape(5.dp),modifier = Modifier.fillMaxWidth(), colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)) {//basic editing for button color and text
+                Text("Submit",color=Color.White, fontFamily = MaterialTheme.typography.titleLarge.fontFamily)
             }
 
         }
@@ -113,8 +119,8 @@ fun HomScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { setDialogOpen(true) },
-                containerColor = Color.Green,
-                contentColor = Color.Black
+                contentColor = Color.Green,
+                containerColor = Color.Black
             ) {
                 //Icon(imageVector = Icons.Default.Add, , contentDescription = null)
 
@@ -128,20 +134,32 @@ fun HomScreen(
     {
         paddingValues ->
         Box(modifier = Modifier
-            .padding(paddingValues)
-            .fillMaxSize()){
+
+            .fillMaxSize()
+        ,contentAlignment = Alignment.Center)
+        {
 
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                AnimatedVisibility(visible=todos.isEmpty(), enter = scaleIn()+fadeIn(), exit = scaleOut()+ fadeOut()) {
+                    Text("No Todos, please add one", modifier = Modifier.align(Alignment.Center),color=Color.White,fontSize=22.sp)
+                }
 
-                items(todos){todos->
-                    Text(text=todos.title)
+            AnimatedVisibility(visible=todos.isNotEmpty(), enter = scaleIn()+fadeIn(), exit = scaleOut()+ fadeOut()) {
+
+
+                LazyColumn(modifier = Modifier.fillMaxSize().padding(bottom=paddingValues.calculateBottomPadding()+8.dp, top = 8.dp, start = 8.dp, end = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    items(todos.sortedBy { it.done }, key = {it.id}) {
+
+
+                    }
                 }
 
 
-
-
             }
+
+
+
+
 
 
 
@@ -157,3 +175,6 @@ fun HomScreen(
 
 
 }
+
+
+
