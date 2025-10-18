@@ -43,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
@@ -90,16 +91,12 @@ fun HomScreen(
                 )
                 )
 
-
                 Spacer(modifier = Modifier.height(4.dp))
-
-
-
 
                 OutlinedTextField(
                     value = description, onValueChange = {
                     setDescription(it)
-                }, modifier = Modifier.padding(8.dp), label = {
+                }, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), label = {
                     Text(text = "Description")
                 }, colors = TextFieldDefaults.colors(
                     focusedContainerColor = Color.White,
@@ -107,34 +104,32 @@ fun HomScreen(
                 )
                 )
 
+                Spacer(modifier = Modifier.height(16.dp))
 
-            }
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Button(
-                onClick = {
-                    if (title.isNotEmpty() && description.isNotEmpty()) {
-                        viewmodel.addTodo(
-                            TodoEntity(
-                                title = title,
-                                subTitle = description
+                Button(
+                    onClick = {
+                        if (title.isNotEmpty() && description.isNotEmpty()) {
+                            viewmodel.addTodo(
+                                TodoEntity(
+                                    title = title,
+                                    subTitle = description
+                                )
                             )
-                        )
-                        setDialogOpen(false)
-                    }
+                            setDialogOpen(false)
+                        }
 
-                },
-                shape = RoundedCornerShape(5.dp),
-                modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
-            ) {//basic editing for button color and text
-                Text(
-                    "Submit",
-                    color = Color.White,
-                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                )
+                    },
+                    shape = RoundedCornerShape(5.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
+                ) {//basic editing for button color and text
+                    Text(
+                        "Submit",
+                        color = Color.White,
+                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily
+                    )
+                }
             }
-
         }
     }
 
@@ -190,8 +185,11 @@ fun HomScreen(
                     ), verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(todos.sortedBy { it.done }, key = { it.id }) {
-
-
+                        TodoItem(
+                            todo = it,
+                            onClick = { viewmodel.updateTodo(it.copy(done = !it.done)) },
+                            onDelete = { viewmodel.deleteTodo(it) }
+                        )
                     }
                 }
 
@@ -216,72 +214,81 @@ fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit) {
 
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.BottomEnd) {
         Row(
-            modifier = Modifier.fillMaxWidth().background(color).clip(RoundedCornerShape(5.dp))
-            .clickable(onClick = {
-                onClick()
-            }
-
-
-            ).padding(
-                horizontal = 8.dp,
-                vertical = 16.dp
-            ), horizontalArrangement = Arrangement.SpaceBetween,
-
-
-
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(8.dp))
+                .background(color)
+                .clickable(onClick = onClick)
+                .padding(
+                    horizontal = 12.dp,
+                    vertical = 16.dp
+                ),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {  }
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(25.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.tertiary)
+                        .padding(4.dp), contentAlignment = Alignment.Center
+                ) {
+                    Row {
+                        AnimatedVisibility(
+                            visible = todo.done,
+                            enter = scaleIn() + fadeIn(),
+                            exit = scaleOut() + fadeOut()
+                        ) {
+                            //   Icon(imageVector = Icons.Default.Check, contentDescription = null, tint = Color.White) { } //still don't know why it snot working
 
-            Box(
-                modifier = Modifier
-                    .size(25.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.tertiary)
-                    .padding(4.dp), contentAlignment = Alignment.Center
-            ) {
-                Row {
-                    AnimatedVisibility(
-                        visible = todo.done,
-                        enter = scaleIn() + fadeIn(),
-                        exit = scaleOut() + fadeOut()
-                    ) {
-                        //   Icon(imageVector = Icons.Default.Check, contentDescription = null, tint = Color.White) { } //still don't know why it snot working
+                        }
+
 
                     }
-
-
                 }
-            }
-            Column {
+                Column(modifier = Modifier.weight(1f)) {
 
-                Text(
-                    text = todo.title,
-                    fontSize = 22.sp,
-                    fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
-                    fontWeight = MaterialTheme.typography.titleLarge.fontWeight
-                )
-                Text(
-                    text = todo.subTitle, fontSize = 12.sp,color = Color(0xB2AD6868)
-                )
+                    Text(
+                        text = todo.title,
+                        fontSize = 22.sp,
+                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily,
+                        fontWeight = MaterialTheme.typography.titleLarge.fontWeight
+                    )
+
+                    Text(
+                        text = todo.subTitle, fontSize = 12.sp,color = Color(0xB2AD6868)
+                    )
+                }
 
             }
         }
-        Box(
-            modifier = Modifier.size(25.dp).clip(CircleShape).background(Color.Red).padding(4.dp)
-        , contentAlignment = Alignment.Center
-        ){
-            //Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White, modifier = Modifier.clickable {
-                onDelete()
-           // })
-        }
-        if (todo.done){
-
+        if (!todo.done){
+            Box(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(25.dp)
+                    .clip(CircleShape)
+                    .background(Color.Red)
+                    .clickable(onClick = onDelete)
+                    .padding(4.dp)
+                , contentAlignment = Alignment.Center
+            ){
+                //Icon(imageVector = Icons.Default.Delete, contentDescription = null, tint = Color.White)
+            }
         }
 
 
     }
-    Text(text= "",modifier = Modifier.paddig()
 }
+
+@Preview(showBackground = true)
+@Composable
+fun GreetingPreview() {
+    HomScreen()
+}
+
+
 
 
 
