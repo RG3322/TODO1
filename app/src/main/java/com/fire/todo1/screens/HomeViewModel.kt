@@ -13,7 +13,16 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class HomeViewmodel: ViewModel(), KoinComponent{
+/**
+ * ViewModel for the Home screen.
+ *
+ * This ViewModel is responsible for managing the UI-related data for the Home screen.
+ * It interacts with the [TodoRepo] to fetch, add, update, and delete to-do items.
+ * It exposes a StateFlow of to-do items for the UI to observe.
+ *
+ * @property todos A public [StateFlow] emitting the current list of [TodoEntity] items.
+ */
+class HomeViewmodel: ViewModel(), KoinComponent {
     private val repo: TodoRepo by inject()
 
     private val _todos: MutableStateFlow<List<TodoEntity>> = MutableStateFlow(emptyList())
@@ -24,18 +33,17 @@ class HomeViewmodel: ViewModel(), KoinComponent{
     }
 
 
-    fun getTodos(){
-        viewModelScope.launch(Dispatchers.IO){
-            repo.getTodos().collect{data->
+    fun getTodos() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repo.getTodos().collect { data ->
                 _todos.update { data }
             }
         }
     }
 
 
-
-    fun addTodo(todo: TodoEntity){
-        viewModelScope.launch(Dispatchers.IO){
+    fun addTodo(todo: TodoEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.addTodo(todo)
         }
 
@@ -47,13 +55,15 @@ class HomeViewmodel: ViewModel(), KoinComponent{
         }
 
     }
-    fun updateTodo(todo: TodoEntity){
-        viewModelScope.launch(Dispatchers.IO){
+
+    fun updateTodo(todo: TodoEntity) {
+        viewModelScope.launch(Dispatchers.IO) {
             repo.updateTodo(todo)
         }
     }
-
-
-
-
 }
+/**
+ *
+ * Basic functions just using repo access here
+ *
+ */

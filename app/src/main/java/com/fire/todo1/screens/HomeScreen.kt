@@ -287,7 +287,9 @@ fun TodoItem(todo: TodoEntity,onClick:()->Unit, onDelete:()->Unit) {
 fun GreetingPreview() {
     HomScreen()
 }
-
+/**
+ * Basic UI screen, just connecting the parts here.
+ */
 
 
 

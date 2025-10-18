@@ -13,3 +13,7 @@ interface TodoRepo {
 
 
 }
+/**
+ * Basic todo repository used for defining the functions of our todo app.
+ * we used the extending property todo:TodoEntity to tell to which table/database will these functions effect.
+ */

@@ -20,16 +20,20 @@ interface TodoDao {
     @Delete
     suspend fun deleteTodo(todo: TodoEntity)
 
-   @Update
-   fun updateTodo(todo: TodoEntity)
+    @Update
+    fun updateTodo(todo: TodoEntity)
 
-   @Insert
-   fun addTodo(todo: TodoEntity)
-
-
-
-
-
-
+    @Insert
+    fun addTodo(todo: TodoEntity)
 
 }
+/**
+ * Basic data base dao. Using roomData base features.
+ *
+ * @constructor Create empty Todo dao
+ */
+
+
+
+
+

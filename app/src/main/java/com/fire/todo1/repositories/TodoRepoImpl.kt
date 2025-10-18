@@ -27,3 +27,6 @@ class TodoRepoImpl(private val database : TodoDatabase): TodoRepo {
         dao.deleteTodo(todo)
     }
 }
+/**
+ * now, here we are adding the functionalities to our functions.
+ */
