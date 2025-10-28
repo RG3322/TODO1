@@ -22,11 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.Add
+import androidx.compose.foundation.shape.RoundedCornerShape //import androidx.compose.material.icons.Icons //import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -39,6 +35,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -48,8 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.room.util.TableInfo
 import com.fire.todo1.database.TodoEntity
+
+
 
 @Composable
 fun HomScreen(
@@ -69,82 +67,52 @@ fun HomScreen(
         }
         Dialog(onDismissRequest = { setDialogOpen(false) })
         {
-
-
             Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(Color.White)
-                    .padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                // ... (dialog content)
             ) {
-
-                OutlinedTextField(
-                    value = title, onValueChange = {
+                OutlinedTextField(value = title, onValueChange = {
                     setTitle(it)
-                }, modifier = Modifier.padding(8.dp), label = {
+                }, label = {
                     Text(text = "Title")
-                }, colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.Blue,
-                )
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                OutlinedTextField(
-                    value = description, onValueChange = {
+                })
+                OutlinedTextField(value = description, onValueChange = {
                     setDescription(it)
-                }, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp), label = {
+                }, label = {
                     Text(text = "Description")
-                }, colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.White,
-                    unfocusedContainerColor = Color.Blue,
-                )
-                )
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    onClick = {
-                        if (title.isNotEmpty() && description.isNotEmpty()) {
-                            viewmodel.addTodo(
-                                TodoEntity(
-                                    title = title,
-                                    subTitle = description
-                                )
-                            )
-                            setDialogOpen(false)
-                        }
-
-                    },
-                    shape = RoundedCornerShape(5.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Blue)
-                ) {//basic editing for button color and text
-                    Text(
-                        "Submit",
-                        color = Color.White,
-                        fontFamily = MaterialTheme.typography.titleLarge.fontFamily
-                    )
-                }
+                })
+                // ...
             }
         }
     }
 
+    // Define state for the FAB menu
+    var expanded by remember { mutableStateOf(false) }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.tertiary,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { setDialogOpen(true) },
-                contentColor = Color.Green,
-                containerColor = Color.Black
-            ) {
-                //Icon(imageVector = Icons.Default.Add, , contentDescription = null)
-
+            Column(horizontalAlignment = Alignment.End) {
+                // Add smaller FABs here when expanded is true
+                AnimatedVisibility(visible = expanded) {
+                    Column {
+                        FloatingActionButton(onClick = { /* Handle action 1 */ expanded = false }, modifier = Modifier.padding(bottom = 8.dp)) {
+                            // Icon for action 1
+                        }
+                        FloatingActionButton(onClick = { /* Handle action 2 */ expanded = false }, modifier = Modifier.padding(bottom = 8.dp)) {
+                            // Icon for action 2
+                        }
+                        FloatingActionButton(onClick = { /* Handle action 2 */ expanded = false }) {
+                            // Icon for action 2
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+                FloatingActionButton(onClick = { expanded = !expanded }) {
+                    // Main FAB icon, e.g., Icons.Default.Add
+                }
             }
-        })
+        }
+    )
 
 
     { paddingValues ->
